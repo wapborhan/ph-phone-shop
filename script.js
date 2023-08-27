@@ -1,6 +1,16 @@
-const loadPhone = async () => {
+const defaultloadPhone = async () => {
   const res = await fetch(
-    "https://openapi.programming-hero.com/api/phones?search=iphone"
+    `https://openapi.programming-hero.com/api/phones?search=samsung`
+  );
+  const datas = await res.json();
+  const phone = datas.data;
+  displayPhones(phone);
+};
+defaultloadPhone();
+
+const loadPhone = async (inputtext) => {
+  const res = await fetch(
+    `https://openapi.programming-hero.com/api/phones?search=${inputtext}`
   );
   const datas = await res.json();
   const phone = datas.data;
@@ -8,7 +18,21 @@ const loadPhone = async () => {
 };
 
 const displayPhones = (phones) => {
+  handleShowAll(phones);
+  // Clear phone showing
   const phoneShow = document.getElementById("phone-container");
+
+  phoneShow.innerHTML = "";
+  const ShowButton = document.getElementById("show-all-container");
+
+  if (phones.length > 9) {
+    ShowButton.classList.remove("hidden");
+  } else {
+    ShowButton.classList.add("hidden");
+  }
+
+  phones = phones.slice(0, 9);
+
   phones.forEach((phone) => {
     const phoneCard = document.createElement("div");
     phoneCard.innerHTML = `
@@ -28,5 +52,12 @@ const displayPhones = (phones) => {
     phoneShow.appendChild(phoneCard);
   });
 };
+const handleSearch = () => {
+  const inputData = document.getElementById("search-field").value;
+  loadPhone(inputData);
+};
 
-loadPhone();
+const handleShowAll = (phones) => {
+  console.log(phones);
+  phones = phones.slice(10, 12);
+};
