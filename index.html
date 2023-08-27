@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>SR Phone Shop</title>
     <link
       href="https://cdn.jsdelivr.net/npm/daisyui@3.6.2/dist/full.css"
       rel="stylesheet"
@@ -12,24 +12,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <header>
-      <h2 class="text-6xl">Phone Shop</h2>
+    <header class="bg-slate-600">
+      <div
+        class="flex justify-between container mx-auto items-center py-5 w-11/12"
+      >
+        <h2 class="text-6xl text-white">Phone Shop</h2>
+
+        <div class="search flex">
+          <input
+            id="search-field"
+            type="text"
+            placeholder="search..."
+            class="input input-bordered w-full max-w-xs"
+          />
+          <button onclick="handleSearch()" class="btn btn-accent">
+            Search
+          </button>
+        </div>
+      </div>
     </header>
 
-    <main class="container mx-auto mt-8">
-      <section class="bg-gray-100 p-4 m-4">
-        <input
-          id="search-field"
-          type="text"
-          placeholder="search..."
-          class="input input-bordered w-full max-w-xs"
-        />
-        <button onclick="handleSearch()" class="btn btn-accent">Search</button>
-        <!-- another search field -->
-        <!-- <input type="text" id="search-field2" placeholder="Search here" class="input input-bordered w-full max-w-xs" />
-          <button onclick="handleSearch2()" class="btn btn-active btn-primary">Search</button> -->
-      </section>
-
+    <main class="container mx-auto mt-8 w-11/12">
       <!-- search result -->
       <section>
         <!-- spinner or loader -->
@@ -38,9 +41,30 @@
         </div>
         <div
           id="phone-container"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 space-x-2 gap-4"
         >
           <!-- phone Data -->
+        </div>
+        <div class="warn hidden mx-auto w-4/12" id="warn">
+          <div class="alert alert-error text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span class="font-bold"
+              ><span class="text-white" id="phone-name"></span> Phones not
+              Availabe
+            </span>
+          </div>
         </div>
         <!-- show all button -->
         <div id="show-all-container" class="hidden text-center my-8">

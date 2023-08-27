@@ -1,42 +1,63 @@
-const defaultloadPhone = async () => {
-  const res = await fetch(
-    `https://openapi.programming-hero.com/api/phones?search=samsung`
-  );
-  const datas = await res.json();
-  const phone = datas.data;
-  displayPhones(phone);
-};
-defaultloadPhone();
+// const defaultloadPhone = async (isShowAll) => {
+//   const res = await fetch(
+//     `https://openapi.programming-hero.com/api/phones?search=samsung`
+//   );
+//   const datas = await res.json();
+//   const phone = datas.data;
+//   displayPhones(phone, isShowAll);
+// };
+// defaultloadPhone();
 
-const loadPhone = async (inputtext) => {
+const loadPhone = async (inputtext, isShowAll) => {
   const res = await fetch(
     `https://openapi.programming-hero.com/api/phones?search=${inputtext}`
   );
   const datas = await res.json();
+  isData = datas.status;
   const phone = datas.data;
-  displayPhones(phone);
+  // displayPhones(phone, isShowAll, inputtext, isData);
+
+  dataLoad(phone, isShowAll, inputtext, isData);
 };
 
-const displayPhones = (phones) => {
+const dataLoad = (phone, isShowAll, inputtext, isData) => {
+  const phoneShow = document.getElementById("phone-container");
+  const warnMsg = document.getElementById("warn");
+  const phoneName = document.getElementById("phone-name");
+  const ShowButton = document.getElementById("show-all-container");
+  if (isData) {
+    displayPhones(phone, isShowAll, inputtext, isData);
+  } else {
+    warnMsg.classList.remove("hidden");
+    phoneShow.innerHTML = "";
+    phoneName.innerText = inputtext;
+    ShowButton.classList.add("hidden");
+    toggleLoader(false);
+  }
+};
+
+const displayPhones = (phones, isShowAll, inputtext) => {
   // handleShowAll(phones);
   // Clear phone showing
   const phoneShow = document.getElementById("phone-container");
+  const warnMsg = document.getElementById("warn");
 
   phoneShow.innerHTML = "";
   const ShowButton = document.getElementById("show-all-container");
 
-  if (phones.length > 9) {
+  if (phones.length > 9 && !isShowAll) {
     ShowButton.classList.remove("hidden");
   } else {
     ShowButton.classList.add("hidden");
   }
-
-  phones = phones.slice(0, 9);
+  if (!isShowAll) {
+    phones = phones.slice(0, 8);
+  }
 
   phones.forEach((phone) => {
     const phoneCard = document.createElement("div");
     phoneCard.innerHTML = `
-    <div class="card w-96 bg-base-100 shadow-xl">
+    <div class="card w-full bg-base-100 shadow-xl">
   <figure class="px-10 pt-10">
     <img src=${phone.image} alt=${phone.phone_name} class="rounded-xl" />
   </figure>
@@ -51,12 +72,14 @@ const displayPhones = (phones) => {
     `;
     phoneShow.appendChild(phoneCard);
   });
+  inputtext = "";
+  warnMsg.classList.add("hidden");
   toggleLoader(false);
 };
-const handleSearch = () => {
+const handleSearch = (isShowAll) => {
   toggleLoader(true);
   const inputData = document.getElementById("search-field").value;
-  loadPhone(inputData);
+  loadPhone(inputData, isShowAll);
 };
 
 const toggleLoader = (isLoading) => {
@@ -72,7 +95,6 @@ const toggleLoader = (isLoading) => {
   }
 };
 
-// const handleShowAll = (phones) => {
-//   console.log(phones);
-//   phones = phones.slice(10, 12);
-// };
+const handleShowAll = () => {
+  handleSearch(true);
+};
